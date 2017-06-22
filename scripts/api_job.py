@@ -3,20 +3,7 @@ Created on Jun 20, 2017
 
 @author: Vinh
 '''
-import imp
-import os
-
-def doesLibIsImported(libName):
-    try:
-        imp.find_module(libName)
-        return True
-    except ImportError:
-        return False
-    
-if doesLibIsImported("requests") == False:
-    if os.name == "nt": # Windows OS
-        os.system("python -m pip install -U requests") # Install requests
-        
+import settings 
 import libs
 
 if __name__ == '__main__':
