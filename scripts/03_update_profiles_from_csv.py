@@ -18,7 +18,7 @@ if __name__ == '__main__':
                         'name': 0,'proxyHost': 1,'proxyPort': 2,'proxyUser': 3,'proxyPass': 4,'proxyIpValidation': 5,'proxyType': 6,'notes': 7,
                         'userAgent': 8,'disablePlugins': 9,'disableWebrtcPlugin': 10,'disableFlashPlugin': 11,'customExtensionFileNames': 12,
                         'useZeroFingerprints': 13,'canvasDefType': 14,'generateNewCanvasNoise': 15,'generateNewFonts': 16,'platform': 17,'doNotTrack': 18,
-                        'hardwareConcurrency': 19,'langHdr': 20,'screenHeight': 21,'screenWidth': 22,'timeZone': 23,'id': 24    
+                        'hardwareConcurrency': 19,'langHdr': 20,'screenHeight': 21,'screenWidth': 22,'timeZone': 23,'id': 24, 'token': 25   
 
                      }
     
@@ -61,7 +61,7 @@ if __name__ == '__main__':
             screenWidth =  row[dictIndexName.get("screenWidth")]
             timeZone =  row[dictIndexName.get("timeZone")]
             id =  row[dictIndexName.get("id")]
-
+            token =  row[dictIndexName.get("token")]
             
             #===================================================================
             # Handle special variables (Not a string value)
@@ -118,7 +118,7 @@ if __name__ == '__main__':
             #===================================================================
             json_encoded_payload = json.dumps(payload)
             headers = {'Content-Type': 'application/json', 'Accept':'application/json'}
-            response = requests.post(updateProfileAPIUrl % (id, settings.token), data=json_encoded_payload, headers=headers)
+            response = requests.post(updateProfileAPIUrl % (id, token), data=json_encoded_payload, headers=headers)
             
             #===================================================================
             # Report

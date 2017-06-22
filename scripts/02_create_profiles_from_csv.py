@@ -12,13 +12,13 @@ if __name__ == '__main__':
     #===========================================================================
     # Define variables
     #===========================================================================
-    createProfileAPIUrl = "https://api.multiloginapp.com/v1/profile/create?token=%s" % settings.token
+    createProfileAPIUrl = "https://api.multiloginapp.com/v1/profile/create?token=%s"
     importCSVPath = "files/input/create_profiles.csv"
     dictIndexName = {
                         'name':0, 'browserType': 1 ,'proxyHost':2 ,'proxyPort':3 ,'proxyUser':4 ,'proxyPass':5 ,'proxyIpValidation':6 ,'proxyType':7 ,'notes':8 ,'userAgent': 9 ,
                         'disablePlugins': 10 ,'disableWebrtcPlugin': 11 ,'disableFlashPlugin': 12 ,'customExtensionFileNames': 13 ,'useZeroFingerprints': 14 ,
                         'generateZeroFingerprintsData': 15 ,'canvasDefType': 16 ,'platform': 17 ,'doNotTrack':18 ,'hardwareConcurrency': 19 ,'langHdr': 20 ,
-                        'screenHeight': 21 ,'screenWidth':22 ,'timeZone':23 ,'tag':24
+                        'screenHeight': 21 ,'screenWidth':22 ,'timeZone':23 ,'tag':24, 'token': 25
                      }
     
     #===========================================================================
@@ -60,6 +60,7 @@ if __name__ == '__main__':
             screenWidth =  row[dictIndexName.get("screenWidth")]
             timeZone =  row[dictIndexName.get("timeZone")]
             tag =  row[dictIndexName.get("tag")]
+            token =  row[dictIndexName.get("token")]
             
             #===================================================================
             # Handle special variables (Not a string value)
@@ -113,7 +114,7 @@ if __name__ == '__main__':
             #===================================================================
             json_encoded_payload = json.dumps(payload)
             headers = {'Content-Type': 'application/json', 'Accept':'application/json'}
-            response = requests.post(createProfileAPIUrl, data=json_encoded_payload, headers=headers)
+            response = requests.post(createProfileAPIUrl % token, data=json_encoded_payload, headers=headers)
             
             #===================================================================
             # Report
