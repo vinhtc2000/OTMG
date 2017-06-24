@@ -54,4 +54,5 @@ if __name__ == '__main__':
             else:
                 print("Cannot remove tag from profile. Error Message: %s" % json.loads(response.text)["value"])
 
-    
+    # Pause the script at the end
+    raw_input()

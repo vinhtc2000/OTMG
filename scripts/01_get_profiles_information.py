@@ -3,7 +3,7 @@ Created on Jun 20, 2017
 
 @author: Vinh
 '''
-import settings 
+import settings
 import libs
 
 if __name__ == '__main__':
@@ -14,7 +14,7 @@ if __name__ == '__main__':
     #===========================================================================
     listUrl = "https://api.multiloginapp.com/v1/profile/list?token=8c7c251554b4fb5f72c9b01e486a3e0d49d132a7"
     detailUrl = "https://api.multiloginapp.com/v1/profile/get-data?profileId=%s&token=8c7c251554b4fb5f72c9b01e486a3e0d49d132a7"
-    resultPath = "D:/OneTenMediaGroup/results/"
+    resultPath = "files/output/" # REMEMBER TO ADD "/" AT THE END OF PATH
     fileListName = "list_%s.csv" % libs.generateUniqueValue()
     fileDetailName = "detail_%s.csv" % libs.generateUniqueValue()
     fileListPath = resultPath + fileListName
@@ -37,3 +37,6 @@ if __name__ == '__main__':
     #===========================================================================
     # Save detail data into a csv file
     libs.addDetailDataToCSVFile(fileDetailPath, jsonData["data"], detailUrl)
+    
+    # Pause the script at the end
+    raw_input()

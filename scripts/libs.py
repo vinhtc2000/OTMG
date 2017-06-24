@@ -7,14 +7,22 @@ import csv
 import datetime
 import json
 import os
-from time import strftime, gmtime
+from time import strftime, gmtime, sleep
 import time
 
 import requests
 
 
 def getJsonDataFromAPI(url):
-    response = requests.request("GET", url)
+    payload =   {}
+    json_encoded_payload = json.dumps(payload)
+    headers = {'Content-Type': 'application/json', 'Accept':'application/json'}
+    response = requests.get(url, data=json_encoded_payload, headers=headers)
+    if (response.status_code == 400): 
+        print "[WARNING]: The request reached Limit Rates. Wait for 1 minute to continue..."
+        sleep(60)
+        response = requests.get(url, data=json_encoded_payload, headers=headers)
+        
     jsonData = json.loads(response.text)
     return jsonData
 
@@ -70,10 +78,10 @@ def addDetailDataToCSVFile(filePath, listData, detailUrl):
     # Add data to csv file
     with open(filePath, 'wb') as out:
         writer = csv.writer(out)
-        writer.writerow(["name", "browserType", "proxyHost", "proxyPort", "proxyIpValidation", "proxyType", "userAgent", "disablePlugins", "disableWebrtcPlugin", "disableFlashPlugin", 
-                         "useZeroFingerprints", "canvasDefType", "platform", "doNotTrack", "hardwareConcurrency", "appVersion", "buildID", "langHdr", "screenHeight", "screenWidth", 
-                         "id", "shared", "canvasNoiseHash", "fonts"])
-        
+        writer.writerow(["id", "name","browserType", "proxyHost","proxyPort", "proxyUser", "proxyPass", "proxyIpValidation", "proxyType",
+                         "notes", "userAgent","disablePlugins","disableWebrtcPlugin", "disableFlashPlugin","customExtensionFileNames",
+                         "useZeroFingerprints","canvasDefType", "canvasNoiseHash","platform","doNotTrack","hardwareConcurrency",
+                         "langHdr","screenHeight","screenWidth","timeZone","shared","fonts"])
         for data in listData:  
             # Get json data from api link
             row = getJsonDataFromAPI(detailUrl % data["sid"])
@@ -85,15 +93,20 @@ def addDetailDataToCSVFile(filePath, listData, detailUrl):
             # Handle field does not exist
             #===================================================================
             try:
-                proxyIpValidation = row["proxyIpValidation"]
+                ids = row["id"]
             except:
-                proxyIpValidation = ""
+                ids = ""
             
             try:
-                proxyType = row["proxyType"]
+                name = row["name"]
             except:
-                proxyType = ""
-                
+                name = ""
+            
+            try:
+                browserType = row["browserType"]
+            except:
+                browserType = ""
+            
             try:
                 proxyHost = row["proxyHost"]
             except:
@@ -105,19 +118,29 @@ def addDetailDataToCSVFile(filePath, listData, detailUrl):
                 proxyPort = ""
             
             try:
-                name = row["name"]
+                proxyUser = row["proxyUser"]
             except:
-                name = ""
+                proxyUser = ""
             
             try:
-                buildID = row["buildID"]
+                proxyPass = row["proxyPass"]
             except:
-                buildID = ""
+                proxyPass = ""
             
             try:
-                browserType = row["browserType"]
+                proxyIpValidation = row["proxyIpValidation"]
             except:
-                browserType = ""
+                proxyIpValidation = ""
+            
+            try:
+                proxyType = row["proxyType"]
+            except:
+                proxyType = ""
+            
+            try:
+                notes = row["notes"]
+            except:
+                notes = ""
             
             try:
                 userAgent = row["userAgent"]
@@ -128,12 +151,22 @@ def addDetailDataToCSVFile(filePath, listData, detailUrl):
                 disablePlugins = row["disablePlugins"]
             except:
                 disablePlugins = ""
-                
+            
             try:
                 disableWebrtcPlugin = row["disableWebrtcPlugin"]
             except:
                 disableWebrtcPlugin = ""
-                
+            
+            try:
+                disableFlashPlugin = row["disableFlashPlugin"]
+            except:
+                disableFlashPlugin = ""
+
+            try:
+                customExtensionFileNames = row["customExtensionFileNames"]
+            except:
+                customExtensionFileNames = ""
+            
             try:
                 useZeroFingerprints = row["useZeroFingerprints"]
             except:
@@ -145,6 +178,11 @@ def addDetailDataToCSVFile(filePath, listData, detailUrl):
                 canvasDefType = ""
             
             try:
+                canvasNoiseHash = row["canvasNoiseHash"]
+            except:
+                canvasNoiseHash = ""
+            
+            try:
                 platform = row["platform"]
             except:
                 platform = ""
@@ -153,41 +191,31 @@ def addDetailDataToCSVFile(filePath, listData, detailUrl):
                 doNotTrack = row["doNotTrack"]
             except:
                 doNotTrack = ""
-                
+            
             try:
                 hardwareConcurrency = row["hardwareConcurrency"]
             except:
                 hardwareConcurrency = ""
-                
-            try:
-                appVersion = row["appVersion"]
-            except:
-                appVersion = ""
-                
+            
             try:
                 langHdr = row["langHdr"]
             except:
                 langHdr = ""
-                
+
             try:
                 screenHeight = row["screenHeight"]
             except:
                 screenHeight = ""
-                
+            
             try:
                 screenWidth = row["screenWidth"]
             except:
                 screenWidth = ""
             
             try:
-                disableFlashPlugin = row["disableFlashPlugin"]
+                timeZone = row["timeZone"]
             except:
-                disableFlashPlugin = ""
-            
-            try:
-                ids = row["id"]
-            except:
-                ids = ""
+                timeZone = ""
             
             try:
                 shared = row["shared"]
@@ -195,25 +223,23 @@ def addDetailDataToCSVFile(filePath, listData, detailUrl):
                 shared = ""
             
             try:
-                canvasNoiseHash = row["canvasNoiseHash"]
-            except:
-                canvasNoiseHash = ""
-            
-            try:
                 fonts = row["fonts"]
             except:
-                fonts = "" 
+                fonts = ""
+            
                 
             print "===================="
+            print detailUrl % data["sid"]
             print "Name = %s" % name
-            print "build ID = %s" % buildID
+            print "Profile ID = %s" % ids
             
             #===================================================================
             # Add fields
             #===================================================================
-            fields = [name, browserType, proxyHost, proxyPort, proxyIpValidation, proxyType , userAgent, 
-                    disablePlugins, disableWebrtcPlugin, disableFlashPlugin, useZeroFingerprints, canvasDefType, platform, doNotTrack, hardwareConcurrency,
-                    appVersion, buildID, langHdr, screenHeight, screenWidth, ids, shared, canvasNoiseHash, fonts]
+            fields = [ids, name,browserType, proxyHost,proxyPort, proxyUser, proxyPass, proxyIpValidation, proxyType,
+                         notes, userAgent,disablePlugins,disableWebrtcPlugin, disableFlashPlugin,customExtensionFileNames,
+                         useZeroFingerprints,canvasDefType, canvasNoiseHash,platform,doNotTrack,hardwareConcurrency,
+                         langHdr,screenHeight,screenWidth,timeZone,shared,fonts]
              
             writer.writerow(fields)
             
