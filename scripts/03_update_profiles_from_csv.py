@@ -126,6 +126,8 @@ if __name__ == '__main__':
             if (response.status_code == 200):    
                 print "Update profile successful!. ID = %s" % json.loads(response.text)["value"]
             else:
+                print "Profile ID = %s" % (id)
+                print "Token = %s" % token
                 print("Cannot update profile. Error Message: %s" % json.loads(response.text)["value"])
 
     # Pause the script at the end

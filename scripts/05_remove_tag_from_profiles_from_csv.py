@@ -52,6 +52,7 @@ if __name__ == '__main__':
             if (response.status_code == 200):    
                 print "Remove tag from profile successful!. Profile ID = %s | Tag ID = %s" % (profileId, tagId)
             else:
+                print "Profile ID = %s | Tag ID = %s" % (profileId, tagId)
                 print("Cannot remove tag from profile. Error Message: %s" % json.loads(response.text)["value"])
 
     # Pause the script at the end

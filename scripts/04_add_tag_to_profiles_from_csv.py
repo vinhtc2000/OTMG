@@ -52,6 +52,7 @@ if __name__ == '__main__':
             if (response.status_code == 200):    
                 print "Add tag to profile successful!. Profile ID = %s | Tag ID = %s" % (profileId, tagId)
             else:
+                print "Profile ID = %s | Tag ID = %s" % (profileId, tagId)
                 print("Cannot add tag to profile. Error Message: %s" % json.loads(response.text)["value"])
 
     # Pause the script at the end
