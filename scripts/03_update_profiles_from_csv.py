@@ -131,4 +131,7 @@ if __name__ == '__main__':
                 print("Cannot update profile. Error Message: %s" % json.loads(response.text)["value"])
 
     # Pause the script at the end
+    print "#==========================================================================="
+    print "# Finished running the script. Press enter to close..."
+    print "#==========================================================================="
     raw_input()
